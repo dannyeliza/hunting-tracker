@@ -48,13 +48,14 @@
 - [x] **Announcement banners on home page** — date-triggered, dismissible banners for CA draw app opening (Apr 15), CO draw deadline, CA draw results (~Jun 15). CSS-styled with action buttons, localStorage dismiss persistence.
 - [x] **Hunt status badges on home page** — colored status badges (Planning, Waiting for Draw, Scouting, etc.) now visible on both draw and OTC hunt cards on the home page
 - [x] **Nevada added to Explorer** — 35 season entries (deer, elk, pronghorn, bighorn sheep, bear, mountain lion, turkey, chukar/quail, rabbit). NV state profile on States page with NDOW links. Wizard season data for deer/elk.
+- [x] **Plan This Hunt flow tested & hardened** — duplicate hunts now open the existing hunt (was: native alert + dashboard bounce); `currentMapHuntId` persisted via `openHuntMap()` (was: direct assignment, refresh lost state); `tagType` included in duplicate checks so OTC vs Draw are distinct; `residency` and `zone` captured as structured fields on both `mockHunts` and `seasonPlanHunts` entries (was: lost after plan).
 
 ---
 
 ## Bugs / Fixes
 - [ ] Verify season data accuracy — CO is sourced from 2026 CPW brochure; other states are AI-generated placeholder, not sourced from state wildlife agencies
 - [ ] Hidden `<select id="state">` options — fixed dynamically but should be pre-populated on init
-- [ ] Test "Plan This Hunt" flow end-to-end from Explorer > Wizard with all pre-fills
+- [x] Test "Plan This Hunt" flow end-to-end from Explorer > Wizard with all pre-fills
 
 ---
 

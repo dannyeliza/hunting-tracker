@@ -6143,6 +6143,11 @@
                         </optgroup>
                     </select>
                 </div>
+                <div style="margin-bottom: 0.75rem;">
+                    <label style="font-size: 0.82rem; font-weight: 600; color: #374151; display: block; margin-bottom: 0.4rem;">Others seen nearby</label>
+                    <div id="sightOtherAnimalsList" style="display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.4rem;"></div>
+                    <button type="button" onclick="addOtherAnimalRow()" style="font-size: 0.75rem; padding: 0.3rem 0.7rem; border: 1px dashed #D1D5DB; border-radius: 8px; background: none; color: #6B7280; cursor: pointer;" onmouseenter="this.style.borderColor='#337357';this.style.color='#337357'" onmouseleave="this.style.borderColor='#D1D5DB';this.style.color='#6B7280'">+ Add Animal</button>
+                </div>
                 <div class="grid-2">
                     <div class="form-group">
                         <label for="sightDate">Date *</label>
@@ -6187,34 +6192,25 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="sightDirection">Direction Traveling</label>
-                        <select id="sightDirection">
-                            <option value="">Select</option>
-                            <option value="N">N</option>
-                            <option value="NE">NE</option>
-                            <option value="E">E</option>
-                            <option value="SE">SE</option>
-                            <option value="S">S</option>
-                            <option value="SW">SW</option>
-                            <option value="W">W</option>
-                            <option value="NW">NW</option>
-                            <option value="Stationary">Stationary</option>
+                        <label for="sightPosition">Position</label>
+                        <select id="sightPosition" onchange="togglePositionOther(this.value)">
+                            <option value="">Select position</option>
+                            <option value="South-facing slope">South-facing slope</option>
+                            <option value="North-facing slope">North-facing slope</option>
+                            <option value="East-facing slope">East-facing slope</option>
+                            <option value="West-facing slope">West-facing slope</option>
+                            <option value="Ridge top">Ridge top</option>
+                            <option value="Creek bottom / drainage">Creek bottom / drainage</option>
+                            <option value="Saddle">Saddle</option>
+                            <option value="Bench flat">Bench flat</option>
+                            <option value="Meadow edge">Meadow edge</option>
+                            <option value="Timber edge">Timber edge</option>
+                            <option value="Road / trail">Road / trail</option>
+                            <option value="Canyon floor">Canyon floor</option>
+                            <option value="__other__">Other...</option>
                         </select>
+                        <input type="text" id="sightPositionOther" placeholder="Describe position..." style="display:none;margin-top:0.35rem;padding:0.4rem 0.6rem;border:1px solid #D1D5DB;border-radius:6px;font-size:0.82rem;width:100%;box-sizing:border-box;">
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="sightFacing">Facing Direction</label>
-                    <select id="sightFacing">
-                        <option value="">Select</option>
-                        <option value="N">N</option>
-                        <option value="NE">NE</option>
-                        <option value="E">E</option>
-                        <option value="SE">SE</option>
-                        <option value="S">S</option>
-                        <option value="SW">SW</option>
-                        <option value="W">W</option>
-                        <option value="NW">NW</option>
-                    </select>
                 </div>
                 <div class="form-group">
                     <label for="sightNotes">Notes</label>
@@ -6413,6 +6409,9 @@
                     <button class="hunt-map-tab" data-tab="plan" onclick="switchHuntMapTab('plan')">Plan</button>
                     <button class="hunt-map-tab" data-tab="map" onclick="switchHuntMapTab('map')">Map</button>
                     <button class="hunt-map-tab" data-tab="trailcams" onclick="switchHuntMapTab('trailcams')">Trail Cams</button>
+                    <button class="hunt-map-tab" data-tab="settings" onclick="switchHuntMapTab('settings')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </button>
                 </div>
 
                 <!-- Content Area -->
@@ -6514,11 +6513,6 @@
                                     <div id="huntMapChecklistProgress" style="margin-top: 0.75rem;"></div>
                                 </div>
                             </div>
-
-                            <!-- Remove Hunt -->
-                            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #E5E7EB;">
-                                <button onclick="removeHuntFromHome(currentMapHuntId)" style="background: none; border: 1px solid #DC2626; color: #DC2626; cursor: pointer; font-size: 0.82rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: 10px; transition: all 0.15s;" onmouseenter="this.style.background='#FEE2E2'" onmouseleave="this.style.background='none'">Remove Hunt</button>
-                            </div>
                         </div>
 
                         <!-- Unit Choice Cards (right column) -->
@@ -6536,6 +6530,18 @@
                         <div style="font-size: 2.5rem; margin-bottom: 0.75rem;"></div>
                         <h3 style="color: #2E2D4D; margin: 0 0 0.5rem 0;">Trail Cameras</h3>
                         <p style="color: #6B7280; font-size: 0.9rem; margin: 0;">Trail cam photos, videos, and camera locations will go here.</p>
+                    </div>
+                </div>
+
+                <!-- Tab: Settings -->
+                <div id="huntMapTabSettings" class="hunt-map-tab-content">
+                    <h3 style="color: #2E2D4D; margin: 0 0 1.25rem 0; font-size: 1rem;">Hunt Settings</h3>
+
+                    <div id="huntSettingsContent"></div>
+
+                    <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #E5E7EB;">
+                        <p style="color: #9CA3AF; font-size: 0.78rem; margin: 0 0 0.75rem 0;">This will permanently remove this hunt and all its data.</p>
+                        <button onclick="removeHuntFromHome(currentMapHuntId)" style="background: none; border: 1px solid #DC2626; color: #DC2626; cursor: pointer; font-size: 0.82rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: 10px; transition: all 0.15s;" onmouseenter="this.style.background='#FEE2E2'" onmouseleave="this.style.background='none'">Remove Hunt</button>
                     </div>
                 </div>
 
@@ -7893,11 +7899,12 @@
             const a = (animal || '').toLowerCase();
             const sb = 'width:16px;height:16px;flex-shrink:0;opacity:0.5;';
             const sl = 'width:20px;height:20px;flex-shrink:0;opacity:0.5;';
+            const sxl = 'width:24px;height:24px;flex-shrink:0;opacity:0.5;';
             if (a.includes('bear')) return `<img src="animals/icon-bear.svg" style="${sb}">`;
             if (a.includes('elk')) return `<img src="animals/icon-elk.svg" style="${sl}">`;
-            if (a.includes('deer') || a.includes('mule') || a.includes('whitetail') || a.includes('blacktail')) return `<img src="animals/icon-deer.svg" style="${sl}">`;
+            if (a.includes('deer') || a.includes('mule') || a.includes('whitetail') || a.includes('blacktail')) return `<img src="animals/icon-deer.svg" style="${sxl}">`;
             if (a.includes('turkey') || a.includes('tom')) return `<img src="animals/icon-turkey.svg" style="${sl}">`;
-            if (a.includes('javelina')) return `<svg style="${sl}" viewBox="0 0 24 24" fill="currentColor"><path d="M4 10c-1 0-2 1-2 2v2l2 1h1l1 3v1h2v-2l1-1h6l1 1v2h2v-1l1-3h1l2-1v-2c0-1-1-2-2-2l-1-1-3-1H8L5 9z"/></svg>`;
+            if (a.includes('javelina')) return `<img src="animals/icon-javelina.svg" style="${sl}">`;
             if (a.includes('pronghorn')) return `<svg style="${sl}" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2l-1 3-1 1v2l-2 2H8L6 11v3l-1 2v3l1 2h2l1-2v-2h1l1 1v3h2l1-2v-3l1-1h1v2l1 2h2l-1-2v-3l-1-2V9l-1-2 1-3V2z"/></svg>`;
             return `<svg style="${sl}" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>`;
         }
@@ -13655,7 +13662,7 @@
                                         <div class="explorer-season-dates">${formatDate(s.start)} - ${formatDate(s.end)}</div>
                                         ${deadlineInfo}
                                         ${s.notes ? `<div class="explorer-season-note">${s.notes}</div>` : ''}
-                                        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); planHuntFromExplorer('${s.state}', '${animalKey}', '${subKey === '_general' ? '' : subKey}', '${s.weapon}', '${s.start || ''}', '${s.end || ''}', '${s.tagType || 'otc'}', \`${(s.seasonName || '').replace(/`/g, '')}\`)" style="margin-top: 0.5rem; padding: 0.3rem 0.65rem; font-size: 0.75rem; width: 100%;">Plan this Hunt</button>
+                                        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); planHuntFromExplorer('${s.state}', '${animalKey}', '${subKey === '_general' ? '' : subKey}', '${s.weapon}', '${s.start || ''}', '${s.end || ''}', '${s.tagType || 'otc'}', \`${(s.seasonName || '').replace(/`/g, '')}\`, '${s.residency || ''}', \`${(s.zone || '').replace(/`/g, '')}\`)" style="margin-top: 0.5rem; padding: 0.3rem 0.65rem; font-size: 0.75rem; width: 100%;">Plan this Hunt</button>
                                     </div>
                                 `}).join('')}
                             </div>
@@ -13675,17 +13682,23 @@
             `;
         }
 
-        function planHuntFromExplorer(state, animal, subspecies, weapon, start, end, tagType, seasonName) {
+        function planHuntFromExplorer(state, animal, subspecies, weapon, start, end, tagType, seasonName, residency, zone) {
             const fullAnimal = subspecies ? `${subspecies} ${animal}` : animal;
             const weaponDisplay = weapon === 'Bow' ? 'Archery' : weapon;
             const huntName = `${state} ${fullAnimal} ${weaponDisplay} Hunt`;
+            const matchesTag = (t) => (t || 'otc') === (tagType || 'otc');
 
-            // Check for duplicates in both mockHunts and seasonPlan
-            const existingHunt = mockHunts.find(h => h.state === state && h.target_animal === fullAnimal && h.weapon_type === weaponDisplay
+            // Check for duplicates in both mockHunts and seasonPlan — if found, open the existing hunt
+            const existingHunt = mockHunts.find(h => h.state === state && h.target_animal === fullAnimal && h.weapon_type === weaponDisplay && matchesTag(h.tagType)
             );
-            if (existingHunt) {
-                alert('This hunt is already on your home page.');
-                showPage('dashboard');
+            const existingPlanForNav = seasonPlanHunts.find(h => h.state === state && h.animal === fullAnimal && h.weapon === weaponDisplay && matchesTag(h.tagType));
+            if (existingHunt || existingPlanForNav) {
+                if (existingPlanForNav) {
+                    openHuntMap(existingPlanForNav.id);
+                } else {
+                    currentHuntId = existingHunt.id;
+                    showPage('huntDetails');
+                }
                 return;
             }
 
@@ -13705,7 +13718,9 @@
                 harvested: false,
                 sighting_count: 0,
                 photo_count: 0,
-                tagType: tagType || 'otc'
+                tagType: tagType || 'otc',
+                residency: residency || '',
+                zone: zone || ''
             };
 
             mockHunts.push(hunt);
@@ -13717,7 +13732,7 @@
             localStorage.setItem('huntChecklist_' + hunt.id, JSON.stringify(checklist));
 
             // Also add to season plan
-            const existingPlan = seasonPlanHunts.find(h => h.state === state && h.animal === fullAnimal && h.weapon === weaponDisplay
+            const existingPlan = seasonPlanHunts.find(h => h.state === state && h.animal === fullAnimal && h.weapon === weaponDisplay && matchesTag(h.tagType)
             );
             if (!existingPlan) {
                 const newPlanHunt = {
@@ -13733,17 +13748,18 @@
                     resultDate: null,
                     deadline: null,
                     notes: seasonName || '',
-                    priority: seasonPlanHunts.length + 1
+                    priority: seasonPlanHunts.length + 1,
+                    residency: residency || '',
+                    zone: zone || ''
                 };
                 seasonPlanHunts.push(newPlanHunt);
                 saveSeasonPlan();
             }
 
             // Navigate to the hunt map page (season plan detail)
-            const planHunt = seasonPlanHunts.find(h => h.state === state && h.animal === fullAnimal && h.weapon === weaponDisplay);
+            const planHunt = seasonPlanHunts.find(h => h.state === state && h.animal === fullAnimal && h.weapon === weaponDisplay && matchesTag(h.tagType));
             if (planHunt) {
-                currentMapHuntId = planHunt.id;
-                showPage('huntMap');
+                openHuntMap(planHunt.id);
             } else {
                 currentHuntId = hunt.id;
                 showPage('huntDetails');
@@ -13850,8 +13866,7 @@
                 saveSeasonPlan();
 
                 hideManualHuntModal();
-                currentMapHuntId = newPlanHunt.id;
-                showPage('huntMap');
+                openHuntMap(newPlanHunt.id);
             }
         }
 
@@ -14155,7 +14170,7 @@
         }
 
         function planZoneHunt(zone, huntName, huntType) {
-            planHuntFromExplorer('California', 'Deer', '', 'Archery', '', '', huntType === 'EITHER-SEX' ? 'otc' : 'draw', huntName + ' (' + zone + ')');
+            planHuntFromExplorer('California', 'Deer', '', 'Archery', '', '', huntType === 'EITHER-SEX' ? 'otc' : 'draw', huntName + ' (' + zone + ')', '', zone);
         }
 
         function renderDeadlinesPage() {
@@ -15714,17 +15729,20 @@
             // Rename and reorder tabs for past/completed hunts
             const tabsBar = document.getElementById('huntMapTabsBar');
             const planTab = tabsBar.querySelector('[data-tab="plan"]');
+            const defaultTab = isPastHunt ? 'plan' : 'observations';
             if (isPastHunt) {
                 planTab.textContent = 'Outcomes';
                 tabsBar.insertBefore(planTab, tabsBar.firstChild);
-                switchHuntMapTab('plan');
                 renderPastHuntDetailsContent(hunt);
             } else {
                 planTab.textContent = 'Plan';
                 const obsTab = tabsBar.querySelector('[data-tab="observations"]');
                 tabsBar.insertBefore(obsTab, tabsBar.firstChild);
-                switchHuntMapTab('observations');
             }
+
+            // Restore saved tab or use default
+            const savedTab = localStorage.getItem('huntTab_' + hunt.id);
+            switchHuntMapTab(savedTab || defaultTab);
 
             // Highlight sidebar item
             document.querySelectorAll('.side-nav-item').forEach(item => {
@@ -15855,11 +15873,6 @@
                 html += `<div style="font-size: 0.88rem; color: #374151; line-height: 1.6;">${learnings}</div>`;
             }
             html += `</div>`;
-
-            // Remove Hunt
-            html += `<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
-                <button onclick="removeHuntFromHome(currentMapHuntId)" style="background: none; border: 1px solid #DC2626; color: #DC2626; cursor: pointer; font-size: 0.82rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: 10px; transition: all 0.15s;" onmouseenter="this.style.background='#FEE2E2'" onmouseleave="this.style.background='none'">Remove Hunt</button>
-            </div>`;
 
             container.innerHTML = html;
         }
@@ -16007,6 +16020,7 @@
                 plan: 'huntMapTabPlan',
                 map: 'huntMapTabMap',
                 trailcams: 'huntMapTabTrailCams',
+                settings: 'huntMapTabSettings',
                 'past-research': 'huntMapTabPastResearch',
                 'past-sightings': 'huntMapTabPastSightings',
                 'past-trailcams': 'huntMapTabPastTrailcams'
@@ -16019,6 +16033,11 @@
             // Invalidate Leaflet map size when switching to map tab
             if (tabName === 'map' && typeof huntMap !== 'undefined' && huntMap) {
                 setTimeout(() => huntMap.invalidateSize(), 100);
+            }
+
+            // Persist active tab per hunt
+            if (currentMapHuntId) {
+                try { localStorage.setItem('huntTab_' + currentMapHuntId, tabName); } catch(e) {}
             }
         }
 
@@ -16243,6 +16262,72 @@
         let sightingPhotoData = [];
         let editingSightingId = null;
 
+        function togglePositionOther(val) {
+            document.getElementById('sightPositionOther').style.display = val === '__other__' ? 'block' : 'none';
+        }
+
+        function loadPositionField(val) {
+            const sel = document.getElementById('sightPosition');
+            const other = document.getElementById('sightPositionOther');
+            const opts = Array.from(sel.options).map(o => o.value);
+            if (val && !opts.includes(val)) {
+                sel.value = '__other__';
+                other.value = val;
+                other.style.display = 'block';
+            } else {
+                sel.value = val || '';
+                other.value = '';
+                other.style.display = 'none';
+            }
+        }
+
+        function addOtherAnimalRow(animal, count) {
+            const list = document.getElementById('sightOtherAnimalsList');
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;align-items:center;gap:0.4rem;';
+            row.innerHTML = `
+                <select class="other-animal-select" style="flex:1;padding:0.35rem 0.5rem;border:1px solid #D1D5DB;border-radius:6px;font-size:0.8rem;">
+                    <option value="">Select animal</option>
+                    <option value="Black Bear">Black Bear</option>
+                    <option value="Mule Deer">Mule Deer</option>
+                    <option value="Whitetail Deer">Whitetail Deer</option>
+                    <option value="Elk">Elk</option>
+                    <option value="Moose">Moose</option>
+                    <option value="Pronghorn">Pronghorn</option>
+                    <option value="Javelina">Javelina</option>
+                    <option value="Wild Pig">Wild Pig</option>
+                    <option value="Mountain Lion">Mountain Lion</option>
+                    <option value="Coyote">Coyote</option>
+                    <option value="Bobcat">Bobcat</option>
+                    <option value="Turkey">Turkey</option>
+                    <option value="Grouse">Grouse</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span style="font-size:0.75rem;color:#6B7280;">&times;</span>
+                <input type="number" class="other-animal-count" min="1" value="${count || 1}" style="width:50px;padding:0.35rem 0.4rem;border:1px solid #D1D5DB;border-radius:6px;font-size:0.8rem;text-align:center;">
+                <button type="button" onclick="this.parentElement.remove()" style="background:none;border:none;color:#D1D5DB;cursor:pointer;font-size:1rem;padding:0;line-height:1;" onmouseenter="this.style.color='#DC2626'" onmouseleave="this.style.color='#D1D5DB'">&times;</button>
+            `;
+            if (animal) row.querySelector('.other-animal-select').value = animal;
+            list.appendChild(row);
+        }
+
+        function loadOtherAnimals(arr) {
+            const list = document.getElementById('sightOtherAnimalsList');
+            list.innerHTML = '';
+            (arr || []).forEach(a => addOtherAnimalRow(a.animal, a.count));
+        }
+
+        function getOtherAnimalsData() {
+            const rows = document.querySelectorAll('#sightOtherAnimalsList > div');
+            const result = [];
+            rows.forEach(row => {
+                const animal = row.querySelector('.other-animal-select').value;
+                const count = parseInt(row.querySelector('.other-animal-count').value) || 1;
+                if (animal) result.push({ animal, count });
+            });
+            return result.length > 0 ? result : null;
+        }
+
         function openSightingModal(year, sightingId) {
             sightingModalYear = year || null;
             editingSightingId = sightingId || null;
@@ -16265,9 +16350,9 @@
                 document.getElementById('sightLng').value = s.lng || '';
                 document.getElementById('sightElevation').value = s.elevation || '';
                 document.getElementById('sightTerrain').value = s.terrain || '';
-                document.getElementById('sightDirection').value = s.direction || '';
-                document.getElementById('sightFacing').value = s.facing || '';
+                loadPositionField(s.position || s.direction || '');
                 document.getElementById('sightNotes').value = s.notes || '';
+                loadOtherAnimals(s.otherAnimals || []);
                 sightingPhotoData = s.photos ? [...s.photos] : [];
                 document.getElementById('sightPhotoPreview').innerHTML = sightingPhotoData.map(p => `<div onclick="event.stopPropagation();openPhotoLightbox('${p}')" style="width: 70px; height: 70px; border-radius: 10px; overflow: hidden; cursor: pointer;"><img src="${p}" style="width: 100%; height: 100%; object-fit: cover;"/></div>`).join('');
             } else {
@@ -16284,9 +16369,9 @@
                 document.getElementById('sightLng').value = '';
                 document.getElementById('sightElevation').value = '';
                 document.getElementById('sightTerrain').value = '';
-                document.getElementById('sightDirection').value = '';
-                document.getElementById('sightFacing').value = '';
+                loadPositionField('');
                 document.getElementById('sightNotes').value = '';
+                loadOtherAnimals([]);
                 document.getElementById('sightPhotoPreview').innerHTML = '';
             }
 
@@ -16353,6 +16438,10 @@
             const key = sightingModalYear ? 'mapSightings' + sightingModalYear : 'mapSightings';
             if (!hunt[key]) hunt[key] = [];
 
+            const posSelect = document.getElementById('sightPosition').value;
+            const posOther = document.getElementById('sightPositionOther').value;
+            const positionVal = posSelect === '__other__' ? posOther : posSelect;
+
             const sightData = {
                 observationType: document.getElementById('sightObsType').value || 'Visual Sighting',
                 animalType: animal,
@@ -16362,8 +16451,8 @@
                 lng: document.getElementById('sightLng').value || null,
                 elevation: document.getElementById('sightElevation').value || null,
                 terrain: document.getElementById('sightTerrain').value || null,
-                direction: document.getElementById('sightDirection').value || null,
-                facing: document.getElementById('sightFacing').value || null,
+                position: positionVal || null,
+                otherAnimals: getOtherAnimalsData(),
                 notes: document.getElementById('sightNotes').value || '',
                 photos: sightingPhotoData.length > 0 ? sightingPhotoData : null
             };
@@ -16402,17 +16491,25 @@
                 : '';
             const photoCount = s.photos && s.photos.length > 1 ? `<span style="font-size:0.65rem;color:#9CA3AF;">+${s.photos.length - 1}</span>` : '';
 
+            const positionDisplay = s.position || s.direction || '';
+            const othersTag = s.otherAnimals && s.otherAnimals.length > 0
+                ? `<span style="font-size:0.6rem;color:#6B7280;background:#F3F4F6;padding:0.1rem 0.35rem;border-radius:8px;white-space:nowrap;">+${s.otherAnimals.reduce((t,a) => t + a.count, 0)} others</span>`
+                : '';
+
             return `
                 <div onclick="openSightingModal(${yearParam}, ${s.id})" style="display:flex;align-items:center;gap:0;padding:0.7rem 0.9rem;background:white;border-radius:12px;cursor:pointer;transition:all 0.15s;border:1px solid #F0F0EC;" onmouseenter="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.08)';this.style.borderColor='#E5E7EB'" onmouseleave="this.style.boxShadow='none';this.style.borderColor='#F0F0EC'">
-                    <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(70px,0.8fr) minmax(50px,0.6fr);gap:0.5rem;align-items:center;">
+                    <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(70px,0.8fr) minmax(70px,0.8fr);gap:0.5rem;align-items:center;">
                         <div style="min-width:0;">
-                            <div style="font-weight:600;color:#2E2D4D;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.animalType}</div>
+                            <div style="display:flex;align-items:center;gap:0.35rem;">
+                                <span style="font-weight:600;color:#2E2D4D;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.animalType}</span>
+                                ${othersTag}
+                            </div>
                             <span style="font-size:0.62rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.4rem;border-radius:12px;border:1px solid ${obsColor}30;white-space:nowrap;">${obsType}</span>
                         </div>
                         <div style="font-size:0.75rem;color:#6B7280;text-align:left;">${formatDate(s.date)}<br><span style="color:#9CA3AF;">${s.time}</span></div>
                         <div style="font-size:0.75rem;color:#374151;text-align:left;">${s.terrain || '<span style="color:#D1D5DB;">—</span>'}</div>
                         <div style="font-size:0.75rem;color:#374151;text-align:left;">${s.elevation ? s.elevation + ' ft' : '<span style="color:#D1D5DB;">—</span>'}</div>
-                        <div style="font-size:0.75rem;color:#374151;text-align:left;">${s.direction || '<span style="color:#D1D5DB;">—</span>'}</div>
+                        <div style="font-size:0.75rem;color:#374151;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${positionDisplay || '<span style="color:#D1D5DB;">—</span>'}</div>
                     </div>
                     <div style="width:90px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;gap:0.4rem;margin-left:0.5rem;">
                         ${photoThumb}${photoCount}
@@ -16471,12 +16568,12 @@
             }
 
             const headerRow = `<div style="display:flex;align-items:center;gap:0;padding:0 0.9rem 0.4rem;margin-bottom:0.25rem;">
-                <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(70px,0.8fr) minmax(50px,0.6fr);gap:0.5rem;">
+                <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(70px,0.8fr) minmax(70px,0.8fr);gap:0.5rem;">
                     <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Animal</span>
                     <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Date</span>
                     <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Terrain</span>
                     <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Elevation</span>
-                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Dir</span>
+                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Position</span>
                 </div>
                 <div style="width:90px;flex-shrink:0;margin-left:0.5rem;"></div>
             </div>`;
@@ -17349,7 +17446,7 @@
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Date</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Terrain</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Elevation</span>
-                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Dir</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Position</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;"></span>
             </div>`;
 
@@ -17369,7 +17466,7 @@
                     <div style="font-size:0.75rem;color:#6B7280;">${formatDate(s.date)}<br><span style="color:#9CA3AF;">${s.time}</span></div>
                     <div style="font-size:0.75rem;color:#374151;">${s.terrain || '<span style="color:#D1D5DB;">—</span>'}</div>
                     <div style="font-size:0.75rem;color:#374151;">${s.elevation ? s.elevation + ' ft' : '<span style="color:#D1D5DB;">—</span>'}</div>
-                    <div style="font-size:0.75rem;color:#374151;">${s.direction || '<span style="color:#D1D5DB;">—</span>'}</div>
+                    <div style="font-size:0.75rem;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.position || s.direction || '<span style="color:#D1D5DB;">—</span>'}</div>
                     <div style="display:flex;justify-content:flex-end;">${photoThumb}</div>
                 </div>`;
             }).join('');
