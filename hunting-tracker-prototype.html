@@ -16410,7 +16410,7 @@
             const obsColors = { 'Visual Sighting': '#337357', 'Tracks': '#8B6914', 'Scat': '#7C5C3C', 'Rub / Scrape': '#9B5DE5', 'Wallow': '#3B82F6', 'Bed': '#059669', 'Trail Cam Hit': '#EA580C', 'Other Sign': '#6B7280' };
             const obsColor = obsColors[obsType] || '#6B7280';
             const photoThumb = s.photos && s.photos.length > 0
-                ? `<div style="flex-shrink:0;width:56px;height:56px;border-radius:10px;overflow:hidden;"><img src="${s.photos[0]}" onclick="event.stopPropagation();openPhotoLightbox(this.src)" style="width:100%;height:100%;object-fit:cover;cursor:pointer;"/></div>`
+                ? `<img src="${s.photos[0]}" onclick="event.stopPropagation();openPhotoLightbox(this.src)" style="width:36px;height:36px;object-fit:cover;border-radius:6px;cursor:pointer;flex-shrink:0;"/>`
                 : '';
             const photoCount = s.photos && s.photos.length > 1 ? `<span style="font-size:0.65rem;color:#9CA3AF;">+${s.photos.length - 1}</span>` : '';
 
@@ -16420,22 +16420,20 @@
                 : '';
 
             return `
-                <div onclick="openSightingModal(${yearParam}, ${s.id})" style="display:flex;align-items:center;gap:0;padding:0.7rem 0.9rem;background:white;border-radius:12px;cursor:pointer;transition:all 0.15s;border:1px solid #F0F0EC;" onmouseenter="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.08)';this.style.borderColor='#E5E7EB'" onmouseleave="this.style.boxShadow='none';this.style.borderColor='#F0F0EC'">
-                    <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(80px,1fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr);gap:0.5rem;align-items:center;">
-                        <div style="min-width:0;">
-                            <div style="display:flex;align-items:center;gap:0.35rem;">
-                                <span style="font-weight:600;color:#2E2D4D;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.animalType}</span>
-                                ${othersTag}
-                            </div>
-                            <span style="font-size:0.62rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.4rem;border-radius:12px;border:1px solid ${obsColor}30;white-space:nowrap;">${obsType}</span>
+                <div onclick="openSightingModal(${yearParam}, ${s.id})" style="display:grid;grid-template-columns:1fr 0.8fr 0.6fr 0.6fr 0.5fr 0.5fr 0.4fr;gap:0.5rem;align-items:center;padding:0.6rem 0.9rem;background:white;border-radius:10px;cursor:pointer;border:1px solid #F0F0EC;transition:all 0.15s;" onmouseenter="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)';this.style.borderColor='#E5E7EB'" onmouseleave="this.style.boxShadow='none';this.style.borderColor='#F0F0EC'">
+                    <div style="min-width:0;">
+                        <div style="display:flex;align-items:center;gap:0.35rem;">
+                            <span style="font-weight:600;color:#2E2D4D;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.animalType}</span>
+                            ${othersTag}
                         </div>
-                        <div style="font-size:0.75rem;color:#374151;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.location || '<span style="color:#D1D5DB;">—</span>'}</div>
-                        <div style="font-size:0.75rem;color:#6B7280;text-align:left;">${formatDate(s.date)}<br><span style="color:#9CA3AF;">${s.time}</span></div>
-                        <div style="font-size:0.75rem;color:#374151;text-align:left;">${s.terrain || '<span style="color:#D1D5DB;">—</span>'}</div>
-                        <div style="font-size:0.75rem;color:#374151;text-align:left;">${s.elevation ? s.elevation + ' ft' : '<span style="color:#D1D5DB;">—</span>'}</div>
-                        <div style="font-size:0.75rem;color:#374151;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${positionDisplay || '<span style="color:#D1D5DB;">—</span>'}</div>
+                        <span style="font-size:0.6rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.35rem;border-radius:10px;border:1px solid ${obsColor}30;white-space:nowrap;">${obsType}</span>
                     </div>
-                    <div style="width:90px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;gap:0.4rem;margin-left:0.5rem;">
+                    <div style="font-size:0.75rem;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.location || '<span style="color:#D1D5DB;">—</span>'}</div>
+                    <div style="font-size:0.75rem;color:#6B7280;">${formatDate(s.date)}<br><span style="color:#9CA3AF;">${s.time}</span></div>
+                    <div style="font-size:0.75rem;color:#374151;">${s.terrain || '<span style="color:#D1D5DB;">—</span>'}</div>
+                    <div style="font-size:0.75rem;color:#374151;">${s.elevation ? s.elevation + ' ft' : '<span style="color:#D1D5DB;">—</span>'}</div>
+                    <div style="font-size:0.75rem;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${positionDisplay || '<span style="color:#D1D5DB;">—</span>'}</div>
+                    <div style="display:flex;align-items:center;justify-content:flex-end;gap:0.4rem;">
                         ${photoThumb}${photoCount}
                         <button onclick="event.stopPropagation(); ${deleteFunc}(${s.id})" style="background:none;border:none;color:#D1D5DB;cursor:pointer;font-size:0.9rem;padding:0.2rem;line-height:1;flex-shrink:0;" onmouseenter="this.style.color='#DC2626'" onmouseleave="this.style.color='#D1D5DB'">&times;</button>
                     </div>
@@ -16527,16 +16525,14 @@
 
             const listEl = document.getElementById('huntMapObservationsList');
 
-            const headerRow = `<div style="display:flex;align-items:center;gap:0;padding:0 0.9rem 0.4rem;margin-bottom:0.25rem;">
-                <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(80px,1fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr);gap:0.5rem;">
-                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Animal</span>
-                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Location</span>
-                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Date</span>
-                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Terrain</span>
-                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Elevation</span>
-                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Position</span>
-                </div>
-                <div style="width:90px;flex-shrink:0;margin-left:0.5rem;"></div>
+            const headerRow = `<div style="display:grid;grid-template-columns:1fr 0.8fr 0.6fr 0.6fr 0.5fr 0.5fr 0.4fr;gap:0.5rem;padding:0 0.9rem 0.5rem;">
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Animal</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Location</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Date</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Terrain</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Elevation</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Position</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;"></span>
             </div>`;
 
             let html = '';
