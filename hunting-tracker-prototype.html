@@ -16579,12 +16579,9 @@
                 pastYears.forEach(year => {
                     const yearSightings = pastByYear[year].sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
                     html += `<div style="margin-top: 1.5rem; background: white; border-radius: 14px; padding: 1.25rem; border: 1px solid #E5E7EB;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-                            <div style="display:flex;align-items:center;gap:0.5rem;">
-                                <h4 style="margin:0;color:#2E2D4D;font-size:0.95rem;font-weight:700;">${year} Observations</h4>
-                                <span style="font-size:0.75rem;color:#9CA3AF;">${yearSightings.length}</span>
-                            </div>
-                            <button class="btn btn-secondary" onclick="openSightingModal('${year}')" style="font-size:0.72rem;padding:0.25rem 0.6rem;">+ Add ${year} Observation</button>
+                        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+                            <h4 style="margin:0;color:#2E2D4D;font-size:0.95rem;font-weight:700;">${year} Observations</h4>
+                            <span style="font-size:0.75rem;color:#9CA3AF;">${yearSightings.length}</span>
                         </div>
                         ${headerRow}
                         <div style="display:flex;flex-direction:column;gap:0.35rem;">`;
