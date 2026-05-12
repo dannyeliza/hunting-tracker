@@ -6457,11 +6457,14 @@
                         <h3 style="color: #2E2D4D; margin: 0; font-size: 1rem;">Observations (<span id="huntMapObservationCount">0</span>)</h3>
                         <button class="btn btn-primary" onclick="openSightingModal()" style="font-size: 0.82rem; padding: 0.4rem 0.85rem;">+ Add Observation</button>
                     </div>
-                    <div id="obsFilterBar" style="display: flex; gap: 0.35rem; margin-bottom: 1rem;">
+                    <div id="obsFilterBar" style="display: flex; gap: 0.35rem; margin-bottom: 1rem; align-items: center;">
                         <button class="obs-filter-btn active" data-filter="all" onclick="switchObsFilter('all')">All <span class="obs-filter-count" id="obsCountAll">0</span></button>
                         <button class="obs-filter-btn" data-filter="sightings" onclick="switchObsFilter('sightings')">Sightings <span class="obs-filter-count" id="obsCountSightings">0</span></button>
                         <button class="obs-filter-btn" data-filter="sign" onclick="switchObsFilter('sign')">Sign <span class="obs-filter-count" id="obsCountSign">0</span></button>
                         <button class="obs-filter-btn" data-filter="trailcam" onclick="switchObsFilter('trailcam')">Trail Cam <span class="obs-filter-count" id="obsCountTrailcam">0</span></button>
+                        <select id="obsAnimalFilter" onchange="switchObsFilter(currentObsFilter)" style="font-size: 0.78rem; padding: 0.3rem 0.6rem; border-radius: 8px; border: 1px solid #D1D5DB; background: white; color: #374151; margin-left: 0.5rem;">
+                            <option value="">All Animals</option>
+                        </select>
                     </div>
                     <div id="huntMapObservationsList"></div>
                 </div>
@@ -16580,9 +16583,23 @@
 
             document.getElementById('huntMapObservationCount').textContent = allSightings.length;
 
+            // Populate animal filter dropdown
+            const animalFilterEl = document.getElementById('obsAnimalFilter');
+            if (animalFilterEl) {
+                const currentVal = animalFilterEl.value;
+                const animals = [...new Set(allSightings.map(s => s.animalType).filter(Boolean))].sort();
+                animalFilterEl.innerHTML = '<option value="">All Animals</option>' + animals.map(a => `<option value="${a}"${a === currentVal ? ' selected' : ''}>${a}</option>`).join('');
+            }
+
             let filtered = allSightings;
             if (currentObsFilter !== 'all' && obsFilterMap[currentObsFilter]) {
                 filtered = allSightings.filter(s => obsFilterMap[currentObsFilter].includes(s.observationType || 'Visual Sighting'));
+            }
+
+            // Apply animal filter
+            const animalFilter = animalFilterEl ? animalFilterEl.value : '';
+            if (animalFilter) {
+                filtered = filtered.filter(s => s.animalType === animalFilter);
             }
 
             const listEl = document.getElementById('huntMapObservationsList');
