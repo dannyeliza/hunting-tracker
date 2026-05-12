@@ -6143,6 +6143,10 @@
                         </optgroup>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="sightLocation">Location / Area</label>
+                    <input type="text" id="sightLocation" placeholder="e.g. Lassen National Forest, Unit 4B">
+                </div>
                 <div style="margin-bottom: 0.75rem;">
                     <label style="font-size: 0.82rem; font-weight: 600; color: #374151; display: block; margin-bottom: 0.4rem;">Others seen nearby</label>
                     <div id="sightOtherAnimalsList" style="display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.4rem;"></div>
@@ -7804,15 +7808,32 @@
             renderSideNavHunts();
             restoreSideNavState();
             try { renderCalPicker(); } catch(e) { console.error('renderCalPicker error:', e); }
-            const lastPage = localStorage.getItem('huntingTrackerCurrentPage') || 'dashboard';
+            let lastPage = localStorage.getItem('huntingTrackerCurrentPage') || 'dashboard';
+            // If saved page requires data that no longer exists, fall back to dashboard
+            if (lastPage === 'huntMap') {
+                const savedHuntId = JSON.parse(localStorage.getItem('currentMapHuntId') || 'null');
+                if (!savedHuntId || !seasonPlanHunts.find(h => h.id === savedHuntId)) {
+                    lastPage = 'dashboard';
+                    localStorage.setItem('huntingTrackerCurrentPage', 'dashboard');
+                }
+            }
             try {
                 showPage(lastPage, true);
             } catch(e) {
                 console.error('showPage error:', e);
                 try { showPage('dashboard', true); } catch(e2) {
                     document.getElementById('dashboardPage').classList.add('active');
+                    loadDashboard();
                 }
             }
+            // Safety net: if no page is active after init, force dashboard
+            setTimeout(() => {
+                const anyActive = document.querySelector('.page.active');
+                if (!anyActive) {
+                    document.getElementById('dashboardPage').classList.add('active');
+                    try { loadDashboard(); } catch(e) {}
+                }
+            }, 100);
 
             // Toggle companions field based on solo checkbox
             const soloCheckbox = document.getElementById('solo');
@@ -8126,7 +8147,8 @@
             if (pageId) {
                 document.getElementById(pageId).classList.add('active');
 
-                // Load page-specific content
+                // Load page-specific content (wrapped in try/catch to never leave a blank screen)
+                try {
                 if (pageName === 'dashboard') {
                     loadDashboard();
                 } else if (pageName === 'explorer') {
@@ -8166,6 +8188,7 @@
                 } else if (pageName === 'allObservations') {
                     initAllObservations();
                 }
+                } catch(e) { console.error('Page render error:', e); }
             }
         }
 
@@ -15571,9 +15594,10 @@
         function renderHuntMapPage() {
             const hunt = seasonPlanHunts.find(h => h.id === currentMapHuntId);
             if (!hunt) {
-                document.getElementById('huntMapPage').classList.remove('active');
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.getElementById('dashboardPage').classList.add('active');
                 localStorage.setItem('huntingTrackerCurrentPage', 'dashboard');
+                try { loadDashboard(); } catch(e) {}
                 return;
             }
 
@@ -16344,6 +16368,7 @@
                 document.getElementById('sightingModalTitle').textContent = 'Edit Observation';
                 document.getElementById('sightObsType').value = s.observationType || 'Visual Sighting';
                 document.getElementById('sightAnimal').value = s.animalType || '';
+                document.getElementById('sightLocation').value = s.location || '';
                 document.getElementById('sightDate').value = s.date || '';
                 document.getElementById('sightTime').value = s.time || '';
                 document.getElementById('sightLat').value = s.lat || '';
@@ -16361,6 +16386,7 @@
                 const filterDefaults = { sightings: 'Visual Sighting', sign: 'Tracks', trailcam: 'Trail Cam Hit' };
                 document.getElementById('sightObsType').value = filterDefaults[currentObsFilter] || 'Visual Sighting';
                 document.getElementById('sightAnimal').value = '';
+                document.getElementById('sightLocation').value = '';
                 const currentHunt = seasonPlanHunts.find(h => h.id === currentMapHuntId);
                 const defaultDate = year ? `${year}-08-15` : (currentHunt && currentHunt.start ? currentHunt.start : new Date().toISOString().split('T')[0]);
                 document.getElementById('sightDate').value = defaultDate;
@@ -16445,6 +16471,7 @@
             const sightData = {
                 observationType: document.getElementById('sightObsType').value || 'Visual Sighting',
                 animalType: animal,
+                location: document.getElementById('sightLocation').value || null,
                 date: date,
                 time: time,
                 lat: document.getElementById('sightLat').value || null,
@@ -16498,7 +16525,7 @@
 
             return `
                 <div onclick="openSightingModal(${yearParam}, ${s.id})" style="display:flex;align-items:center;gap:0;padding:0.7rem 0.9rem;background:white;border-radius:12px;cursor:pointer;transition:all 0.15s;border:1px solid #F0F0EC;" onmouseenter="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.08)';this.style.borderColor='#E5E7EB'" onmouseleave="this.style.boxShadow='none';this.style.borderColor='#F0F0EC'">
-                    <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(70px,0.8fr) minmax(70px,0.8fr);gap:0.5rem;align-items:center;">
+                    <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(80px,1fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr);gap:0.5rem;align-items:center;">
                         <div style="min-width:0;">
                             <div style="display:flex;align-items:center;gap:0.35rem;">
                                 <span style="font-weight:600;color:#2E2D4D;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.animalType}</span>
@@ -16506,6 +16533,7 @@
                             </div>
                             <span style="font-size:0.62rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.4rem;border-radius:12px;border:1px solid ${obsColor}30;white-space:nowrap;">${obsType}</span>
                         </div>
+                        <div style="font-size:0.75rem;color:#374151;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.location || '<span style="color:#D1D5DB;">—</span>'}</div>
                         <div style="font-size:0.75rem;color:#6B7280;text-align:left;">${formatDate(s.date)}<br><span style="color:#9CA3AF;">${s.time}</span></div>
                         <div style="font-size:0.75rem;color:#374151;text-align:left;">${s.terrain || '<span style="color:#D1D5DB;">—</span>'}</div>
                         <div style="font-size:0.75rem;color:#374151;text-align:left;">${s.elevation ? s.elevation + ' ft' : '<span style="color:#D1D5DB;">—</span>'}</div>
@@ -16568,8 +16596,9 @@
             }
 
             const headerRow = `<div style="display:flex;align-items:center;gap:0;padding:0 0.9rem 0.4rem;margin-bottom:0.25rem;">
-                <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(70px,0.8fr) minmax(70px,0.8fr);gap:0.5rem;">
+                <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(80px,1fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr);gap:0.5rem;">
                     <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Animal</span>
+                    <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Location</span>
                     <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Date</span>
                     <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Terrain</span>
                     <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Elevation</span>
@@ -17440,8 +17469,9 @@
                 return;
             }
 
-            const header = `<div style="display:grid;grid-template-columns:1fr 0.8fr 0.7fr 0.6fr 0.6fr 0.5fr 0.4fr;gap:0.5rem;padding:0 0.9rem 0.5rem;">
+            const header = `<div style="display:grid;grid-template-columns:1fr 0.8fr 0.7fr 0.6fr 0.6fr 0.5fr 0.5fr 0.4fr;gap:0.5rem;padding:0 0.9rem 0.5rem;">
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Animal</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Location</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Hunt</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Date</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Terrain</span>
@@ -17457,11 +17487,12 @@
                     ? `<img src="${s.photos[0]}" onclick="event.stopPropagation();openPhotoLightbox(this.src)" style="width:36px;height:36px;object-fit:cover;border-radius:6px;cursor:pointer;flex-shrink:0;"/>`
                     : '';
 
-                return `<div onclick="currentMapHuntId=${s.huntId};showPage('huntMap');setTimeout(()=>switchHuntMapTab('observations'),100)" style="display:grid;grid-template-columns:1fr 0.8fr 0.7fr 0.6fr 0.6fr 0.5fr 0.4fr;gap:0.5rem;align-items:center;padding:0.6rem 0.9rem;background:white;border-radius:10px;cursor:pointer;border:1px solid #F0F0EC;transition:all 0.15s;" onmouseenter="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)';this.style.borderColor='#E5E7EB'" onmouseleave="this.style.boxShadow='none';this.style.borderColor='#F0F0EC'">
+                return `<div onclick="currentMapHuntId=${s.huntId};showPage('huntMap');setTimeout(()=>switchHuntMapTab('observations'),100)" style="display:grid;grid-template-columns:1fr 0.8fr 0.7fr 0.6fr 0.6fr 0.5fr 0.5fr 0.4fr;gap:0.5rem;align-items:center;padding:0.6rem 0.9rem;background:white;border-radius:10px;cursor:pointer;border:1px solid #F0F0EC;transition:all 0.15s;" onmouseenter="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)';this.style.borderColor='#E5E7EB'" onmouseleave="this.style.boxShadow='none';this.style.borderColor='#F0F0EC'">
                     <div style="min-width:0;">
                         <div style="font-weight:600;color:#2E2D4D;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.animalType}</div>
                         <span style="font-size:0.6rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.35rem;border-radius:10px;border:1px solid ${obsColor}30;">${obsType}</span>
                     </div>
+                    <div style="font-size:0.75rem;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.location || '<span style="color:#D1D5DB;">—</span>'}</div>
                     <div style="font-size:0.75rem;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.huntName}</div>
                     <div style="font-size:0.75rem;color:#6B7280;">${formatDate(s.date)}<br><span style="color:#9CA3AF;">${s.time}</span></div>
                     <div style="font-size:0.75rem;color:#374151;">${s.terrain || '<span style="color:#D1D5DB;">—</span>'}</div>
