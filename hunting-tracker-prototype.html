@@ -16498,28 +16498,33 @@
                 });
             });
 
-            const sightingsCount = allSightings.filter(s => (s.observationType || 'Visual Sighting') === 'Visual Sighting').length;
-            const signCount = allSightings.filter(s => obsFilterMap.sign.includes(s.observationType)).length;
-            const trailcamCount = allSightings.filter(s => (s.observationType) === 'Trail Cam Hit').length;
+            // Current year sightings only for the main table counts/filters
+            const currentYear = String(new Date().getFullYear());
+            const currentSightings = allSightings.filter(s => s._year === currentYear);
+            const pastSightings = allSightings.filter(s => s._year !== currentYear);
+
+            const sightingsCount = currentSightings.filter(s => (s.observationType || 'Visual Sighting') === 'Visual Sighting').length;
+            const signCount = currentSightings.filter(s => obsFilterMap.sign.includes(s.observationType)).length;
+            const trailcamCount = currentSightings.filter(s => (s.observationType) === 'Trail Cam Hit').length;
 
             const countAllEl = document.getElementById('obsCountAll');
             const countSightEl = document.getElementById('obsCountSightings');
             const countSignEl = document.getElementById('obsCountSign');
             const countCamEl = document.getElementById('obsCountTrailcam');
-            if (countAllEl) countAllEl.textContent = allSightings.length;
+            if (countAllEl) countAllEl.textContent = currentSightings.length;
             if (countSightEl) countSightEl.textContent = sightingsCount;
             if (countSignEl) countSignEl.textContent = signCount;
             if (countCamEl) countCamEl.textContent = trailcamCount;
 
-            document.getElementById('huntMapObservationCount').textContent = allSightings.length;
+            document.getElementById('huntMapObservationCount').textContent = currentSightings.length;
 
-            // Populate animal filter pills
+            // Populate animal filter pills (current year only)
             const animalPillsEl = document.getElementById('obsAnimalPills');
             if (animalPillsEl) {
-                const animals = [...new Set(allSightings.map(s => s.animalType).filter(Boolean))].sort();
+                const animals = [...new Set(currentSightings.map(s => s.animalType).filter(Boolean))].sort();
                 if (animals.length > 1) {
                     animalPillsEl.innerHTML = animals.map(a => {
-                        const count = allSightings.filter(s => s.animalType === a).length;
+                        const count = currentSightings.filter(s => s.animalType === a).length;
                         const isActive = currentObsAnimalFilter === a;
                         return `<button class="obs-filter-btn${isActive ? ' active' : ''}" onclick="switchObsAnimalFilter('${a.replace(/'/g, "\\'")}')" style="margin-left:0.2rem;">${a} <span class="obs-filter-count">${count}</span></button>`;
                     }).join('');
@@ -16528,8 +16533,8 @@
                 }
             }
 
-            // Apply type filter
-            let filtered = allSightings;
+            // Apply filters to current year
+            let filtered = currentSightings;
             if (currentObsFilter !== 'all' && obsFilterMap[currentObsFilter]) {
                 filtered = filtered.filter(s => obsFilterMap[currentObsFilter].includes(s.observationType || 'Visual Sighting'));
             }
@@ -16538,14 +16543,6 @@
             }
 
             const listEl = document.getElementById('huntMapObservationsList');
-
-            if (filtered.length === 0) {
-                const emptyMsg = currentObsFilter === 'all' && !currentObsAnimalFilter
-                    ? 'No observations recorded yet. Add your first observation.'
-                    : 'No matching observations.';
-                listEl.innerHTML = `<div style="padding: 2rem; text-align: center;"><p style="color: #9CA3AF; margin: 0; font-size: 0.85rem;">${emptyMsg}</p></div>`;
-                return;
-            }
 
             const headerRow = `<div style="display:flex;align-items:center;gap:0;padding:0 0.9rem 0.4rem;margin-bottom:0.25rem;">
                 <div style="flex:1;min-width:0;display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(80px,1fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr) minmax(60px,0.7fr);gap:0.5rem;">
@@ -16559,32 +16556,44 @@
                 <div style="width:90px;flex-shrink:0;margin-left:0.5rem;"></div>
             </div>`;
 
-            // Group by year
-            const byYear = {};
-            filtered.forEach(s => {
-                if (!byYear[s._year]) byYear[s._year] = [];
-                byYear[s._year].push(s);
-            });
-            const years = Object.keys(byYear).sort((a, b) => b.localeCompare(a));
-
-            let html = headerRow;
-            const multiYear = years.length > 1;
-            years.forEach(year => {
-                const yearSightings = byYear[year].sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
-                if (multiYear) {
-                    html += `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0.9rem 0.3rem;">
-                        <span style="font-weight:700;color:#2E2D4D;font-size:0.88rem;">${year}</span>
-                        <span style="font-size:0.72rem;color:#9CA3AF;">${yearSightings.length} observation${yearSightings.length !== 1 ? 's' : ''}</span>
-                    </div>`;
-                }
-                html += `<div style="display:flex;flex-direction:column;gap:0.35rem;${multiYear ? 'margin-bottom:0.75rem;' : ''}">`;
-                yearSightings.forEach(s => {
-                    const deleteFunc = s._dataKey === 'mapSightings2025' ? 'deletePastSighting' : 'deleteHuntMapSighting';
-                    const yearParam = s._dataKey === 'mapSightings2025' ? '2025' : null;
-                    html += renderSightingCard(s, deleteFunc, yearParam);
-                });
+            let html = '';
+            if (filtered.length === 0) {
+                html += `<div style="padding: 2rem; text-align: center;"><p style="color: #9CA3AF; margin: 0; font-size: 0.85rem;">${currentObsFilter === 'all' && !currentObsAnimalFilter ? 'No observations recorded yet. Add your first observation.' : 'No matching observations.'}</p></div>`;
+            } else {
+                html += headerRow;
+                const rows = filtered.sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+                html += `<div style="display:flex;flex-direction:column;gap:0.35rem;">`;
+                rows.forEach(s => { html += renderSightingCard(s, 'deleteHuntMapSighting', null); });
                 html += `</div>`;
-            });
+            }
+
+            // Past year cards — separate table per year
+            if (pastSightings.length > 0) {
+                const pastByYear = {};
+                pastSightings.forEach(s => {
+                    if (!pastByYear[s._year]) pastByYear[s._year] = [];
+                    pastByYear[s._year].push(s);
+                });
+                const pastYears = Object.keys(pastByYear).sort((a, b) => b.localeCompare(a));
+
+                pastYears.forEach(year => {
+                    const yearSightings = pastByYear[year].sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+                    html += `<div style="margin-top: 1.5rem; background: white; border-radius: 14px; padding: 1.25rem; border: 1px solid #E5E7EB;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                            <div style="display:flex;align-items:center;gap:0.5rem;">
+                                <h4 style="margin:0;color:#2E2D4D;font-size:0.95rem;font-weight:700;">${year} Observations</h4>
+                                <span style="font-size:0.75rem;color:#9CA3AF;">${yearSightings.length}</span>
+                            </div>
+                            <button class="btn btn-secondary" onclick="openSightingModal('${year}')" style="font-size:0.72rem;padding:0.25rem 0.6rem;">+ Add ${year} Observation</button>
+                        </div>
+                        ${headerRow}
+                        <div style="display:flex;flex-direction:column;gap:0.35rem;">`;
+                    yearSightings.forEach(s => {
+                        html += renderSightingCard(s, 'deletePastSighting', year === '2025' ? '2025' : null);
+                    });
+                    html += `</div></div>`;
+                });
+            }
 
             listEl.innerHTML = html;
         }
