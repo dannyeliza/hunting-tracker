@@ -4294,17 +4294,9 @@
     <!-- Side Navigation -->
     <div id="sideNav" class="hidden">
         <button class="side-nav-item" data-page="dashboard" onclick="showPage('dashboard')">
-            <span class="side-nav-icon"><svg viewBox="0 0 100 100" fill="currentColor" width="18" height="18"><path d="M92.93,47H84.59A34.77,34.77,0,0,0,53,15.41V7.07a3,3,0,1,0-6,0v8.34A34.77,34.77,0,0,0,15.41,47H7.07a3,3,0,0,0,0,6h8.34A34.77,34.77,0,0,0,47,84.59v8.34a3,3,0,0,0,6,0V84.59A34.77,34.77,0,0,0,84.59,53h8.34a3,3,0,1,0,0-6ZM74.15,53h4.42A28.78,28.78,0,0,1,53,78.57V74.15a3,3,0,0,0-6,0v4.42A28.78,28.78,0,0,1,21.43,53h4.42a3,3,0,0,0,0-6H21.43A28.78,28.78,0,0,1,47,21.43v4.42a3,3,0,0,0,6,0V21.43A28.78,28.78,0,0,1,78.57,47H74.15a3,3,0,0,0,0,6Z"/><path d="M50,36.76A13.24,13.24,0,1,0,63.24,50,13.26,13.26,0,0,0,50,36.76Z"/></svg></span> 2026 Hunts
+            <span class="side-nav-icon"><svg viewBox="0 0 100 100" fill="currentColor" width="18" height="18"><path d="M92.93,47H84.59A34.77,34.77,0,0,0,53,15.41V7.07a3,3,0,1,0-6,0v8.34A34.77,34.77,0,0,0,15.41,47H7.07a3,3,0,0,0,0,6h8.34A34.77,34.77,0,0,0,47,84.59v8.34a3,3,0,0,0,6,0V84.59A34.77,34.77,0,0,0,84.59,53h8.34a3,3,0,1,0,0-6ZM74.15,53h4.42A28.78,28.78,0,0,1,53,78.57V74.15a3,3,0,0,0-6,0v4.42A28.78,28.78,0,0,1,21.43,53h4.42a3,3,0,0,0,0-6H21.43A28.78,28.78,0,0,1,47,21.43v4.42a3,3,0,0,0,6,0V21.43A28.78,28.78,0,0,1,78.57,47H74.15a3,3,0,0,0,0,6Z"/><path d="M50,36.76A13.24,13.24,0,1,0,63.24,50,13.26,13.26,0,0,0,50,36.76Z"/></svg></span> Hunts
         </button>
-        <div id="sideNavHuntsWrapper" style="padding-left: 0.5rem; display: none;">
-            <button class="side-nav-item" onclick="showPage('dashboard')" style="font-size: 0.78rem; padding: 0.35rem 0.85rem; color: rgba(255,255,255,0.7); font-weight: 600;">All Hunts</button>
-            <div id="sideNavHunts"></div>
-            <div class="side-nav-divider" style="margin: 0.3rem 0;"></div>
-            <div class="side-nav-section-label" style="padding: 0.3rem 0.75rem; font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Past Hunts</div>
-            <button class="side-nav-item side-nav-section-label" onclick="toggleSideNav2025()" style="padding: 0.3rem 0.75rem;"> 2025 <svg id="sideNav2025Chev" class="section-chevron collapsed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;margin-left:auto;"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-            <div id="sideNav2025Hunts" style="display: none; padding-left: 0.25rem;"></div>
-        </div>
+        <div id="sideNavHunts" style="padding-left: 0.5rem;"></div>
         <button class="side-nav-item" data-page="explorer" onclick="showPage('explorer')">
             <span class="side-nav-icon"><svg viewBox="0 0 100 100" fill="currentColor" width="18" height="18"><path d="m42.578 58.328-8.9375 19.25c-0.4375 1.1875 0.71875 2.3438 1.9062 1.9062l19.25-8.9375c1.2188-0.45312 2.1875-1.4219 2.6406-2.6406l8.9375-19.25c0.4375-1.1875-0.71875-2.3438-1.9062-1.9062l-19.25 8.9375c-1.2188 0.45312-2.1875 1.4219-2.6406 2.6406zm4.3438 1.7188c1.7031-1.7031 4.4531-1.7031 6.1562 0s1.7031 4.4531 0 6.1562-4.4531 1.7031-6.1562 0-1.7031-4.4531 0-6.1562z"/><path d="m14.672 63.109c0 19.516 15.812 35.328 35.328 35.328s35.328-15.812 35.328-35.328c0-17.641-12.938-32.266-29.844-34.906v-3.125c4.0938-2.0312 6.9219-6.2344 6.9219-11.109 0-6.8438-5.5625-12.406-12.406-12.406s-12.406 5.5625-12.406 12.406c0 4.875 2.8281 9.0938 6.9219 11.109v3.125c-16.906 2.6406-29.844 17.25-29.844 34.906zm40.812-42.5v-1.375c0-0.70312-0.5625-1.2656-1.2656-1.2656h-8.4219c-0.70312 0-1.2656 0.5625-1.2656 1.2656v1.375c-1.9062-1.5781-3.125-3.9688-3.125-6.6406 0-4.75 3.8594-8.6094 8.6094-8.6094s8.6094 3.8594 8.6094 8.6094c0 2.6719-1.2188 5.0469-3.125 6.6406zm-32.859 47.375 4.875-4.875-4.875-4.875c2.0312-11.453 11.047-20.484 22.5-22.5l4.875 4.875 4.875-4.875c11.453 2.0312 20.484 11.047 22.5 22.5l-4.875 4.875 4.875 4.875c-2.0312 11.453-11.047 20.484-22.5 22.5l-4.875-4.875-4.875 4.875c-11.453-2.0312-20.484-11.047-22.5-22.5z"/></svg></span> Explorer
         </button>
@@ -7932,154 +7924,73 @@
             return `<svg style="${sl}" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>`;
         }
 
+        const shortAnimal = (a) => (a || '').replace(/Rocky Mountain\s*/i, '').replace(/\s*(Either|Either Sex)\s*/i, '').replace(/\bMule\s*/i, '').replace(/\s*(Buck|Doe|Bull|Cow|Tom|Hen)\s*/i, '').replace(/\s+/g, ' ').trim();
+
+        function getHuntIdentityKey(hunt) {
+            const state = (hunt.state || '').toLowerCase();
+            const animal = shortAnimal(hunt.animal || hunt.target_animal || '').toLowerCase();
+            return `${state}::${animal}`;
+        }
+
+        function buildHuntGroups() {
+            const groups = {};
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            seasonPlanHunts.filter(h => !isWeaponExcluded(h.weapon)).forEach(h => {
+                const key = getHuntIdentityKey(h);
+                if (!groups[key]) groups[key] = { key, state: h.state, animal: h.animal, hunts: [] };
+                const isCurrent = !h.isPastHunt && h.huntStatus !== 'completed' && !(h.end && new Date(h.end + 'T23:59:59') < today);
+                const year = h.start ? parseInt(h.start.substring(0, 4)) : (h.end ? parseInt(h.end.substring(0, 4)) : new Date().getFullYear());
+                groups[key].hunts.push({ ...h, isCurrent, year });
+            });
+
+            return groups;
+        }
+
         function renderSideNavHunts() {
             const container = document.getElementById('sideNavHunts');
             if (!container) return;
 
-            // Only show current/upcoming hunts (not past converted hunts)
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const hunts = seasonPlanHunts.filter(h => {
-                if (isWeaponExcluded(h.weapon)) return false;
-                if (h.isPastHunt) return false;
-                if (h.end && new Date(h.end + 'T23:59:59') < today) return false;
-                return true;
+            const groups = buildHuntGroups();
+            const groupList = Object.values(groups);
+
+            const savedOrder = JSON.parse(localStorage.getItem('planCardOrder') || '[]');
+            groupList.sort((a, b) => {
+                const pa = a.hunts.find(h => h.isCurrent) || a.hunts[0];
+                const pb = b.hunts.find(h => h.isCurrent) || b.hunts[0];
+                if (savedOrder.length > 0) {
+                    const ai = savedOrder.indexOf(pa.id);
+                    const bi = savedOrder.indexOf(pb.id);
+                    if (ai !== -1 || bi !== -1) {
+                        if (ai === -1) return 1;
+                        if (bi === -1) return -1;
+                        return ai - bi;
+                    }
+                }
+                return (pa.priority || 99) - (pb.priority || 99);
             });
 
-            // Use same sort order as home page cards
-            const savedOrder = JSON.parse(localStorage.getItem('planCardOrder') || '[]');
-            if (savedOrder.length > 0) {
-                hunts.sort((a, b) => {
-                    const ai = savedOrder.indexOf(a.id);
-                    const bi = savedOrder.indexOf(b.id);
-                    if (ai === -1 && bi === -1) return a.priority - b.priority;
-                    if (ai === -1) return 1;
-                    if (bi === -1) return -1;
-                    return ai - bi;
-                });
-            } else {
-                hunts.sort((a, b) => a.priority - b.priority);
-            }
-
-            // Make the Hunts button expandable
-            const huntsBtn = document.querySelector('.side-nav-item[data-page="dashboard"]');
-            if (huntsBtn && hunts.length > 0) {
-                huntsBtn.innerHTML = `<span class="side-nav-icon"><svg viewBox="0 0 100 100" fill="currentColor" width="18" height="18"><path d="M92.93,47H84.59A34.77,34.77,0,0,0,53,15.41V7.07a3,3,0,1,0-6,0v8.34A34.77,34.77,0,0,0,15.41,47H7.07a3,3,0,0,0,0,6h8.34A34.77,34.77,0,0,0,47,84.59v8.34a3,3,0,0,0,6,0V84.59A34.77,34.77,0,0,0,84.59,53h8.34a3,3,0,1,0,0-6ZM74.15,53h4.42A28.78,28.78,0,0,1,53,78.57V74.15a3,3,0,0,0-6,0v4.42A28.78,28.78,0,0,1,21.43,53h4.42a3,3,0,0,0,0-6H21.43A28.78,28.78,0,0,1,47,21.43v4.42a3,3,0,0,0,6,0V21.43A28.78,28.78,0,0,1,78.57,47H74.15a3,3,0,0,0,0,6Z"/><path d="M50,36.76A13.24,13.24,0,1,0,63.24,50,13.26,13.26,0,0,0,50,36.76Z"/></svg></span> 2026 Hunts <svg id="huntsChevron" class="section-chevron collapsed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;margin-left:auto;"><polyline points="9 18 15 12 9 6"/></svg>`;
-                huntsBtn.onclick = function(e) {
-                    toggleSideNavHunts();
-                };
-            }
-
-            if (hunts.length === 0) {
+            if (groupList.length === 0) {
                 container.innerHTML = '';
                 return;
             }
             const stateAbbr = (s) => (stateAbbreviations && stateAbbreviations[s]) || s;
-            const shortAnimal = (a) => (a || '').replace(/Rocky Mountain\s*/i, '').replace(/\s*(Either|Either Sex)\s*/i, '').replace(/\bMule\s*/i, '').replace(/\s*(Buck|Doe|Bull|Cow|Tom|Hen)\s*/i, '').replace(/\s+/g, ' ').trim();
-            container.innerHTML = hunts.map(h => {
-                const abbr = stateAbbr(h.state);
-                const label = `${abbr} ${shortAnimal(h.animal)}`;
-                const icon = getSideNavAnimalIcon(h.animal);
-                return `<button class="side-nav-item" data-page="huntMap_${h.id}" onclick="openHuntMap(${h.id})" style="font-size: 0.78rem; padding: 0.5rem 0.75rem; color: rgba(255,255,255,0.55); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 0.45rem; text-align: left;">
-                    ${icon}${label}
+            container.innerHTML = groupList.map(g => {
+                const primary = g.hunts.find(h => h.isCurrent) || g.hunts[g.hunts.length - 1];
+                const abbr = stateAbbr(g.state);
+                const label = `${abbr} ${shortAnimal(g.animal)}`;
+                const icon = getSideNavAnimalIcon(g.animal);
+                const yearCount = new Set(g.hunts.map(h => h.year)).size;
+                const yearBadge = yearCount > 1 ? `<span style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-left:auto;">${yearCount}yr</span>` : '';
+                return `<button class="side-nav-item" data-page="huntMap_${primary.id}" onclick="openHuntMap(${primary.id})" style="font-size: 0.78rem; padding: 0.5rem 0.75rem; color: rgba(255,255,255,0.55); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 0.45rem; text-align: left;">
+                    ${icon}${label}${yearBadge}
                 </button>`;
             }).join('');
         }
 
-        function toggleSideNavHunts() {
-            const wrapper = document.getElementById('sideNavHuntsWrapper');
-            const chevron = document.getElementById('huntsChevron');
-            if (!wrapper) return;
-            const isVisible = wrapper.style.display !== 'none';
-            wrapper.style.display = isVisible ? 'none' : 'block';
-            if (chevron) {
-                chevron.classList.toggle('collapsed', isVisible);
-                chevron.classList.toggle('expanded', !isVisible);
-            }
-            localStorage.setItem('sideNavHuntsOpen', isVisible ? 'false' : 'true');
-        }
-
-        function toggleSideNav2025() {
-            const container = document.getElementById('sideNav2025Hunts');
-            const chevron = document.getElementById('sideNav2025Chev');
-            if (!container) return;
-            const isVisible = container.style.display !== 'none';
-            container.style.display = isVisible ? 'none' : 'block';
-            if (chevron) {
-                chevron.classList.toggle('collapsed', isVisible);
-                chevron.classList.toggle('expanded', !isVisible);
-            }
-            localStorage.setItem('sideNav2025Open', isVisible ? 'false' : 'true');
-            if (!isVisible) renderSideNav2025Hunts();
-        }
-
         function restoreSideNavState() {
-            if (localStorage.getItem('sideNavHuntsOpen') === 'true') {
-                const wrapper = document.getElementById('sideNavHuntsWrapper');
-                const chevron = document.getElementById('huntsChevron');
-                if (wrapper) wrapper.style.display = 'block';
-                if (chevron) { chevron.classList.remove('collapsed'); chevron.classList.add('expanded'); }
-            }
-            if (localStorage.getItem('sideNav2025Open') === 'true') {
-                const container = document.getElementById('sideNav2025Hunts');
-                const chevron = document.getElementById('sideNav2025Chev');
-                if (container) { container.style.display = 'block'; renderSideNav2025Hunts(); }
-                if (chevron) { chevron.classList.remove('collapsed'); chevron.classList.add('expanded'); }
-            }
-        }
-
-        function renderSideNav2025Hunts() {
-            const container = document.getElementById('sideNav2025Hunts');
-            if (!container) return;
-
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const stateAbbr = (s) => (stateAbbreviations && stateAbbreviations[s]) || s;
-            const shortAnimal = (a) => (a || '').replace(/Rocky Mountain\s*/i, '').replace(/\s*(Either|Either Sex)\s*/i, '').replace(/\bMule\s*/i, '').replace(/\s*(Buck|Doe|Bull|Cow|Tom|Hen)\s*/i, '').replace(/\s+/g, ' ').trim();
-
-            // Build unified list matching loadPastHunts() logic
-            const convertedMockIds = seasonPlanHunts.filter(h => h.mockHuntId).map(h => h.mockHuntId);
-            const pastMock = mockHunts
-                .filter(h => new Date(h.end_date) < today && !convertedMockIds.includes(h.id))
-                .map(h => ({ id: h.id, source: 'mock', animal: h.target_animal, state: h.state, end: h.end_date }));
-
-            const pastSeason = seasonPlanHunts
-                .filter(h => h.isPastHunt || h.huntStatus === 'completed' || (h.end && new Date(h.end + 'T23:59:59') < today))
-                .map(h => ({ id: h.id, source: 'season', animal: h.animal, state: h.state, name: h.name, end: h.end }));
-
-            const allPast = [...pastMock, ...pastSeason];
-            allPast.sort((a, b) => new Date(b.end) - new Date(a.end));
-
-            // Apply saved drag order (same key as Past Hunts page)
-            const savedPastOrder = JSON.parse(localStorage.getItem('pastHuntCardOrder') || '[]');
-            if (savedPastOrder.length > 0) {
-                allPast.sort((a, b) => {
-                    const ai = savedPastOrder.indexOf(a.id);
-                    const bi = savedPastOrder.indexOf(b.id);
-                    if (ai === -1 && bi === -1) return 0;
-                    if (ai === -1) return 1;
-                    if (bi === -1) return -1;
-                    return ai - bi;
-                });
-            }
-
-            let html = '';
-            html += `<button class="side-nav-item" onclick="showPage('pastHuntsPage')" style="font-size: 0.78rem; padding: 0.35rem 0.85rem; color: rgba(255,255,255,0.7); font-weight: 600;">All Hunts</button>`;
-
-            allPast.forEach(h => {
-                const abbr = stateAbbr(h.state);
-                const label = `${abbr} ${shortAnimal(h.animal) || h.name}`;
-                const icon = getSideNavAnimalIcon(h.animal);
-                const truncStyle = 'font-size: 0.78rem; padding: 0.5rem 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 0.45rem; text-align: left;';
-                if (h.source === 'season') {
-                    html += `<button class="side-nav-item" data-page="huntMap_${h.id}" onclick="openHuntMap(${h.id})" style="${truncStyle} color: rgba(255,255,255,0.55);">${icon}${label}</button>`;
-                } else {
-                    html += `<button class="side-nav-item" data-page="huntMap_${h.id}" data-mock-id="${h.id}" onclick="viewHunt(${h.id})" style="${truncStyle} color: rgba(255,255,255,0.55);">${icon}${label}</button>`;
-                }
-            });
-
-            html += `<button class="side-nav-item" onclick="addPast2025Hunt()" style="font-size: 0.72rem; padding: 0.3rem 0.85rem; color: rgba(255,255,255,0.3);">+ Add Hunt</button>`;
-            container.innerHTML = html;
+            // Sidebar is always visible now — no collapsible sections
         }
 
         function addPast2025Hunt() {
@@ -8874,7 +8785,7 @@
 
             seasonPlanHunts.push(converted);
             saveSeasonPlan();
-            renderSideNav2025Hunts();
+            renderSideNavHunts();
             renderSideNavHunts();
             openHuntMap(converted.id);
         }
@@ -10584,7 +10495,7 @@
                     harvested: hunt.harvested
                 });
                 localStorage.setItem('pastHunts2025', JSON.stringify(pastHunts2025));
-                renderSideNav2025Hunts();
+                renderSideNavHunts();
             }
 
             // Reset wizard
@@ -13181,7 +13092,7 @@
             hideRemoveHuntModal();
             renderHomeContext(new Date());
             renderSeasonPlan();
-            renderSideNav2025Hunts();
+            renderSideNavHunts();
 
             // If we're on the hunt map page, go back to appropriate page
             if (document.getElementById('huntMapPage').classList.contains('active')) {
@@ -16572,7 +16483,20 @@
         }
 
         function renderHuntMapSightings(hunt) {
-            const allSightings = hunt.mapSightings || [];
+            // Gather all sightings across years for this hunt identity
+            const identityKey = getHuntIdentityKey(hunt);
+            let allSightings = [];
+
+            seasonPlanHunts.filter(h => getHuntIdentityKey(h) === identityKey).forEach(h => {
+                (h.mapSightings || []).forEach(s => {
+                    const year = s.date ? s.date.substring(0, 4) : String(new Date().getFullYear());
+                    allSightings.push({ ...s, _sourceHuntId: h.id, _year: year, _dataKey: 'mapSightings' });
+                });
+                (h.mapSightings2025 || []).forEach(s => {
+                    const year = s.date ? s.date.substring(0, 4) : '2025';
+                    allSightings.push({ ...s, _sourceHuntId: h.id, _year: year, _dataKey: 'mapSightings2025' });
+                });
+            });
 
             const sightingsCount = allSightings.filter(s => (s.observationType || 'Visual Sighting') === 'Visual Sighting').length;
             const signCount = allSightings.filter(s => obsFilterMap.sign.includes(s.observationType)).length;
@@ -16604,12 +16528,11 @@
                 }
             }
 
+            // Apply type filter
             let filtered = allSightings;
             if (currentObsFilter !== 'all' && obsFilterMap[currentObsFilter]) {
-                filtered = allSightings.filter(s => obsFilterMap[currentObsFilter].includes(s.observationType || 'Visual Sighting'));
+                filtered = filtered.filter(s => obsFilterMap[currentObsFilter].includes(s.observationType || 'Visual Sighting'));
             }
-
-            // Apply animal filter
             if (currentObsAnimalFilter) {
                 filtered = filtered.filter(s => s.animalType === currentObsAnimalFilter);
             }
@@ -16617,9 +16540,9 @@
             const listEl = document.getElementById('huntMapObservationsList');
 
             if (filtered.length === 0) {
-                const emptyMsg = currentObsFilter === 'all'
+                const emptyMsg = currentObsFilter === 'all' && !currentObsAnimalFilter
                     ? 'No observations recorded yet. Add your first observation.'
-                    : `No ${currentObsFilter === 'sightings' ? 'sightings' : currentObsFilter === 'sign' ? 'sign' : 'trail cam'} observations yet.`;
+                    : 'No matching observations.';
                 listEl.innerHTML = `<div style="padding: 2rem; text-align: center;"><p style="color: #9CA3AF; margin: 0; font-size: 0.85rem;">${emptyMsg}</p></div>`;
                 return;
             }
@@ -16636,32 +16559,47 @@
                 <div style="width:90px;flex-shrink:0;margin-left:0.5rem;"></div>
             </div>`;
 
-            const rows = filtered.sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time)).map(s => renderSightingCard(s, 'deleteHuntMapSighting', null)).join('');
-            listEl.innerHTML = headerRow + `<div style="display:flex;flex-direction:column;gap:0.35rem;">${rows}</div>`;
+            // Group by year
+            const byYear = {};
+            filtered.forEach(s => {
+                if (!byYear[s._year]) byYear[s._year] = [];
+                byYear[s._year].push(s);
+            });
+            const years = Object.keys(byYear).sort((a, b) => b.localeCompare(a));
+
+            let html = headerRow;
+            const multiYear = years.length > 1;
+            years.forEach(year => {
+                const yearSightings = byYear[year].sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+                if (multiYear) {
+                    html += `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0.9rem 0.3rem;">
+                        <span style="font-weight:700;color:#2E2D4D;font-size:0.88rem;">${year}</span>
+                        <span style="font-size:0.72rem;color:#9CA3AF;">${yearSightings.length} observation${yearSightings.length !== 1 ? 's' : ''}</span>
+                    </div>`;
+                }
+                html += `<div style="display:flex;flex-direction:column;gap:0.35rem;${multiYear ? 'margin-bottom:0.75rem;' : ''}">`;
+                yearSightings.forEach(s => {
+                    const deleteFunc = s._dataKey === 'mapSightings2025' ? 'deletePastSighting' : 'deleteHuntMapSighting';
+                    const yearParam = s._dataKey === 'mapSightings2025' ? '2025' : null;
+                    html += renderSightingCard(s, deleteFunc, yearParam);
+                });
+                html += `</div>`;
+            });
+
+            listEl.innerHTML = html;
         }
 
-        // === 2025 Past Sightings ===
+        // === Past Sightings ===
         function deletePastSighting(sightingId) {
             const hunt = seasonPlanHunts.find(h => h.id === currentMapHuntId);
             if (!hunt || !hunt.mapSightings2025) return;
             hunt.mapSightings2025 = hunt.mapSightings2025.filter(s => s.id !== sightingId);
-            renderPastSightings(hunt);
+            renderHuntMapSightings(hunt);
             saveSeasonPlan();
         }
 
         function renderPastSightings(hunt) {
-            const sightings = hunt.mapSightings2025 || [];
-            const countEl = document.getElementById('huntMapSightingCount2025');
-            if (countEl) countEl.textContent = sightings.length;
-            const listEl = document.getElementById('huntMapSightingsList2025');
-            if (!listEl) return;
-
-            if (sightings.length === 0) {
-                listEl.innerHTML = '<div style="background: white; border-radius: 14px; padding: 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); text-align: center;"><p style="color: #6B7280; margin: 0;">No 2025 sightings yet. Add past sightings to track patterns year over year.</p></div>';
-                return;
-            }
-
-            listEl.innerHTML = sightings.sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time)).map(s => renderSightingCard(s, 'deletePastSighting')).join('');
+            // Now handled by renderHuntMapSightings year grouping
         }
 
         // === Year-aware data helpers ===
@@ -17454,14 +17392,17 @@
             const huntFilter = document.getElementById('allObsHuntFilter');
             const animalFilter = document.getElementById('allObsAnimalFilter');
 
-            const huntsWithObs = seasonPlanHunts.filter(h => h.mapSightings && h.mapSightings.length > 0);
+            const huntsWithObs = seasonPlanHunts.filter(h => (h.mapSightings && h.mapSightings.length > 0) || (h.mapSightings2025 && h.mapSightings2025.length > 0));
             const stAbbr = (s) => (stateAbbreviations && stateAbbreviations[s]) || s;
 
             huntFilter.innerHTML = '<option value="">All Hunts</option>' +
                 huntsWithObs.map(h => `<option value="${h.id}">${stAbbr(h.state)} ${h.animal}</option>`).join('');
 
             const allObs = [];
-            seasonPlanHunts.forEach(h => { (h.mapSightings || []).forEach(s => allObs.push(s)); });
+            seasonPlanHunts.forEach(h => {
+                (h.mapSightings || []).forEach(s => allObs.push(s));
+                (h.mapSightings2025 || []).forEach(s => allObs.push(s));
+            });
             const animals = [...new Set(allObs.map(s => s.animalType).filter(Boolean))].sort();
             animalFilter.innerHTML = '<option value="">All Animals</option>' +
                 animals.map(a => `<option value="${a}">${a}</option>`).join('');
@@ -17481,6 +17422,9 @@
             const hunts = huntFilterVal ? seasonPlanHunts.filter(h => h.id == huntFilterVal) : seasonPlanHunts;
             hunts.forEach(h => {
                 (h.mapSightings || []).forEach(s => {
+                    allObs.push({ ...s, huntId: h.id, huntName: `${stAbbr(h.state)} ${h.animal}`, huntState: h.state });
+                });
+                (h.mapSightings2025 || []).forEach(s => {
                     allObs.push({ ...s, huntId: h.id, huntName: `${stAbbr(h.state)} ${h.animal}`, huntState: h.state });
                 });
             });
