@@ -16408,6 +16408,7 @@
             const yearParam = year ? `'${year}'` : 'null';
             const obsType = s.observationType || 'Visual Sighting';
             const obsColors = { 'Visual Sighting': '#337357', 'Tracks': '#8B6914', 'Scat': '#7C5C3C', 'Rub / Scrape': '#9B5DE5', 'Wallow': '#3B82F6', 'Bed': '#059669', 'Trail Cam Hit': '#EA580C', 'Other Sign': '#6B7280' };
+            const obsEmoji = { 'Visual Sighting': '👀', 'Tracks': '🐾', 'Scat': '💩', 'Rub / Scrape': '🌲', 'Wallow': '💧', 'Bed': '🛏️', 'Trail Cam Hit': '📷', 'Other Sign': '📌' };
             const obsColor = obsColors[obsType] || '#6B7280';
             const photoThumb = s.photos && s.photos.length > 0
                 ? `<img src="${s.photos[0]}" onclick="event.stopPropagation();openPhotoLightbox(this.src)" style="width:36px;height:36px;object-fit:cover;border-radius:6px;cursor:pointer;flex-shrink:0;"/>`
@@ -16426,7 +16427,7 @@
                             <span style="font-weight:600;color:#2E2D4D;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.animalType}</span>
                             ${othersTag}
                         </div>
-                        <span style="font-size:0.6rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.35rem;border-radius:10px;border:1px solid ${obsColor}30;white-space:nowrap;">${obsType}</span>
+                        <span style="font-size:0.6rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.35rem;border-radius:10px;border:1px solid ${obsColor}30;white-space:nowrap;">${obsEmoji[obsType] || ''} ${obsType}</span>
                     </div>
                     <div style="font-size:0.75rem;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.location || '<span style="color:#D1D5DB;">—</span>'}</div>
                     <div style="font-size:0.75rem;color:#6B7280;">${formatDate(s.date)}<br><span style="color:#9CA3AF;">${s.time}</span></div>
@@ -16442,6 +16443,7 @@
 
         let currentObsFilter = 'all';
         let currentObsAnimalFilter = '';
+        let currentObsDateSort = 'desc';
         const obsFilterMap = {
             sightings: ['Visual Sighting'],
             sign: ['Tracks', 'Scat', 'Rub / Scrape', 'Wallow', 'Bed', 'Other Sign'],
@@ -16450,6 +16452,12 @@
 
         function switchObsAnimalFilter(animal) {
             currentObsAnimalFilter = currentObsAnimalFilter === animal ? '' : animal;
+            const hunt = seasonPlanHunts.find(h => h.id === currentMapHuntId);
+            if (hunt) renderHuntMapSightings(hunt);
+        }
+
+        function toggleObsDateSort() {
+            currentObsDateSort = currentObsDateSort === 'desc' ? 'asc' : 'desc';
             const hunt = seasonPlanHunts.find(h => h.id === currentMapHuntId);
             if (hunt) renderHuntMapSightings(hunt);
         }
@@ -16525,10 +16533,11 @@
 
             const listEl = document.getElementById('huntMapObservationsList');
 
+            const sortArrow = currentObsDateSort === 'desc' ? '↓' : '↑';
             const headerRow = `<div style="display:grid;grid-template-columns:1fr 0.8fr 0.6fr 0.6fr 0.5fr 0.5fr 0.4fr;gap:0.5rem;padding:0 0.9rem 0.5rem;">
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Animal</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Location</span>
-                <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Date</span>
+                <span onclick="toggleObsDateSort()" style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;cursor:pointer;user-select:none;" onmouseenter="this.style.color='#2E2D4D'" onmouseleave="this.style.color='#9CA3AF'">Date ${sortArrow}</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Terrain</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Elevation</span>
                 <span style="font-size:0.68rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Position</span>
@@ -16540,7 +16549,10 @@
                 html += `<div style="padding: 2rem; text-align: center;"><p style="color: #9CA3AF; margin: 0; font-size: 0.85rem;">${currentObsFilter === 'all' && !currentObsAnimalFilter ? 'No observations recorded yet. Add your first observation.' : 'No matching observations.'}</p></div>`;
             } else {
                 html += headerRow;
-                const rows = filtered.sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+                const dateSorter = currentObsDateSort === 'desc'
+                    ? (a, b) => (b.date + b.time).localeCompare(a.date + a.time)
+                    : (a, b) => (a.date + a.time).localeCompare(b.date + b.time);
+                const rows = filtered.sort(dateSorter);
                 html += `<div style="display:flex;flex-direction:column;gap:0.35rem;">`;
                 rows.forEach(s => { html += renderSightingCard(s, 'deleteHuntMapSighting', null); });
                 html += `</div>`;
@@ -16556,7 +16568,9 @@
                 const pastYears = Object.keys(pastByYear).sort((a, b) => b.localeCompare(a));
 
                 pastYears.forEach(year => {
-                    const yearSightings = pastByYear[year].sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+                    const yearSightings = pastByYear[year].sort(currentObsDateSort === 'desc'
+                        ? (a, b) => (b.date + b.time).localeCompare(a.date + a.time)
+                        : (a, b) => (a.date + a.time).localeCompare(b.date + b.time));
                     html += `<div style="margin-top: 1.5rem;">
                         <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
                             <h4 style="margin:0;color:#2E2D4D;font-size:0.95rem;font-weight:700;">${year} Observations</h4>
@@ -17441,6 +17455,7 @@
             const rows = allObs.map(s => {
                 const obsType = s.observationType || 'Visual Sighting';
                 const obsColor = obsColors[obsType] || '#6B7280';
+                const obsEmoji = { 'Visual Sighting': '👀', 'Tracks': '🐾', 'Scat': '💩', 'Rub / Scrape': '🌲', 'Wallow': '💧', 'Bed': '🛏️', 'Trail Cam Hit': '📷', 'Other Sign': '📌' };
                 const photoThumb = s.photos && s.photos.length > 0
                     ? `<img src="${s.photos[0]}" onclick="event.stopPropagation();openPhotoLightbox(this.src)" style="width:36px;height:36px;object-fit:cover;border-radius:6px;cursor:pointer;flex-shrink:0;"/>`
                     : '';
@@ -17448,7 +17463,7 @@
                 return `<div onclick="currentMapHuntId=${s.huntId};showPage('huntMap');setTimeout(()=>switchHuntMapTab('observations'),100)" style="display:grid;grid-template-columns:1fr 0.8fr 0.7fr 0.6fr 0.6fr 0.5fr 0.5fr 0.4fr;gap:0.5rem;align-items:center;padding:0.6rem 0.9rem;background:white;border-radius:10px;cursor:pointer;border:1px solid #F0F0EC;transition:all 0.15s;" onmouseenter="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)';this.style.borderColor='#E5E7EB'" onmouseleave="this.style.boxShadow='none';this.style.borderColor='#F0F0EC'">
                     <div style="min-width:0;">
                         <div style="font-weight:600;color:#2E2D4D;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.animalType}</div>
-                        <span style="font-size:0.6rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.35rem;border-radius:10px;border:1px solid ${obsColor}30;">${obsType}</span>
+                        <span style="font-size:0.6rem;font-weight:600;color:${obsColor};background:${obsColor}12;padding:0.1rem 0.35rem;border-radius:10px;border:1px solid ${obsColor}30;">${obsEmoji[obsType] || ''} ${obsType}</span>
                     </div>
                     <div style="font-size:0.75rem;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.location || '<span style="color:#D1D5DB;">—</span>'}</div>
                     <div style="font-size:0.75rem;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.huntName}</div>
